@@ -3,8 +3,8 @@ const { Enums } = require('../utils/common');
 const { BOOKED, CANCELLED, INITIATED, PENDING } = Enums.BOOKING_STATUS;
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Bookings', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('Bookings', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -45,7 +45,7 @@ module.exports = {
       }
     });
   },
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Bookings');
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('Bookings');
   }
 };

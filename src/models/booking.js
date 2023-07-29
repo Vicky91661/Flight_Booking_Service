@@ -1,10 +1,23 @@
 'use strict';
-const {Enums}=require('../utils/common');
+const { Enums } = require('../utils/common');
 const { BOOKED, CANCELLED, INITIATED, PENDING } = Enums.BOOKING_STATUS;
 
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  const Booking = sequelize.define('Booking', {
-
+  class Booking extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+    
+    }
+  }
+  Booking.init({
     flightId:
     {
       type: DataTypes.INTEGER,
@@ -16,26 +29,26 @@ module.exports = (sequelize, DataTypes) => {
     },
     status:
     {
-      type:DataTypes.ENUM,
+      type: DataTypes.ENUM,
       values: [BOOKED, CANCELLED, INITIATED, PENDING],
       defaultValue: INITIATED,
       allowNull: false
     },
     noOfSeats:
     {
-      type:DataTypes.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue:1
+      defaultValue: 1
     },
-    totalCost: 
+    totalCost:
     {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1
     },
-  }, {});
-  Booking.associate = function(models) {
-    // associations can be defined here
-  };
+  }, {
+    sequelize,
+    modelName: 'Booking',
+  });
   return Booking;
 };
