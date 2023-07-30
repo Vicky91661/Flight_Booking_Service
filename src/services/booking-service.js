@@ -93,7 +93,7 @@ async function cancelBooking(bookingId)
 {
     const transaction = await db.sequelize.transaction();
     try {
-        const bookingDetails = await BookingRepository.get(bookingId, transaction);
+        const bookingDetails = await bookingRepository.get(bookingId, transaction);
         if (bookingDetails.status == CANCELLED) {
             await transaction.commit();
             return true;
@@ -110,9 +110,18 @@ async function cancelBooking(bookingId)
         return error;
     }
 }
+
+async function cancelOldBookings(){
+    try {
+        const time=new Date(Date.now()-1000*300);
+        const response = await bookingRepository.cancelOldBookings(time);
+        return response;
+    } catch (error) {
+        console.log(error)
+    }
+}
 module.exports={
     createBooking,
     makePayment,
-    cancelBooking
-
+    cancelOldBookings
 }
