@@ -12,19 +12,30 @@ async function createBooking(req,res)
                 noOfSeats:req.body.noOfSeats
             });
         SuccessResponse.data = response;
-        return res.status(status.CREATED).json(SuccessResponse);
+        return res.status(status.OK).json(SuccessResponse);
     } catch (error) {
-        console.log(error.code);
-        if (error.code == 'ECONNREFUSED') {
-    
-            throw new AppError('Server is down', status.BAD_REQUEST);
-        }
-        ErrorResponse.message = 'something went wrong while creating airplane';
         ErrorResponse.error = error;
-        return res.status(error.statusCode).json(ErrorResponse);
+        return res.status(status.INTERNAL_SERVER_ERROR).json(ErrorResponse);
+    }
+}
+
+async function makePayment(req, res) {
+    try {
+        const response = await BookingService.makePayment(
+            {
+                totalCost: req.body.totalCost,
+                userId: req.body.userId,
+                bookingId: req.body.bookingId
+            });
+        SuccessResponse.data = response;
+        return res.status(status.OK).json(SuccessResponse);
+    } catch (error) {
+        ErrorResponse.error = error;
+        return res.status(status.INTERNAL_SERVER_ERROR).json(ErrorResponse);
     }
 }
 
 module.exports = {
-    createBooking
+    createBooking,
+    makePayment
 }
